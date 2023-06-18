@@ -1,7 +1,6 @@
 """Config flow for qBittorrent."""
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 from qbittorrent.client import LoginRequired
@@ -29,6 +28,14 @@ USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_USERNAME): str,
         vol.Required(CONF_PASSWORD): str,
         vol.Optional(CONF_VERIFY_SSL, default=True): bool,
+    }
+)
+
+
+REAUTH_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_USERNAME): str,
+        vol.Required(CONF_PASSWORD): str,
     }
 )
 
@@ -61,16 +68,3 @@ class QbittorrentConfigFlow(ConfigFlow, domain=DOMAIN):
 
         schema = self.add_suggested_values_to_schema(USER_DATA_SCHEMA, user_input)
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
-
-    async def async_step_import(self, config: dict[str, Any]) -> FlowResult:
-        """Import a config entry from configuration.yaml."""
-        self._async_abort_entries_match({CONF_URL: config[CONF_URL]})
-        return self.async_create_entry(
-            title=config.get(CONF_NAME, DEFAULT_NAME),
-            data={
-                CONF_URL: config[CONF_URL],
-                CONF_USERNAME: config[CONF_USERNAME],
-                CONF_PASSWORD: config[CONF_PASSWORD],
-                CONF_VERIFY_SSL: True,
-            },
-        )

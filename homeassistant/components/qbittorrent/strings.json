@@ -8,6 +8,13 @@
           "url": "[%key:common::config_flow::data::url%]",
           "verify_ssl": "[%key:common::config_flow::data::verify_ssl%]"
         }
+      },
+      "reauth_confirm": {
+        "description": "Please re-enter your qBittorrent developer access token.",
+        "data": {
+          "username": "[%key:common::config_flow::data::username%]",
+          "password": "[%key:common::config_flow::data::password%]"
+        }
       }
     },
     "error": {
